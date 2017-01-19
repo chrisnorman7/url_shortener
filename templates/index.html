@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>URL Shortener | {% block title %}Index{% endblock %}</title>
+</head>
+<body>
+<h1>URL Shortener</h1>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<h2>Message</h2>
+{% for message in messages %}
+<p>{{ message }}</p>
+{% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% if form.errors %}
+<h2>Error!</h2>
+<dl>
+{% for name, errors in form.errors.items() %}
+<dt>{{ name.replace('_', ' ').title() }}</dt>
+<dd><ul>
+{% for error in errors %}
+<li>{{ error }}</li>
+{% endfor %}
+</ul></dd>
+{% endfor %}
+</dl>
+{% endif %}
+{% block main %}
+{% if url_id %}
+<h2>URL</h2>
+{% with url = urljoin(request.url_root, url_for('url_route', id=url_id)) %}
+<p>Your URL is <a href="{{ url }}">{{ url }}</a>.</p>
+{% endwith %}
+{% endif %}
+<h2>Add a URL</h2>
+<form action="{{ url_for("index") }}" method="post">
+{{ form.hidden_tag() }}
+<p>{{ form.url.label }} {{ form.url }}</p>
+<p><input type="submit" value="Go"></P.
+</form>
+{% endblock %}
+</body>
+</html>
